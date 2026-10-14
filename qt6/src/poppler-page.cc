@@ -884,6 +884,21 @@ void Page::addAnnotation(const Annotation *ann)
     AnnotationPrivate::addAnnotationToPage(m_page->page, m_page->parentDoc, ann);
 }
 
+bool Page::moveAnnotation(const Annotation *ann, int index)
+{
+    return AnnotationPrivate::moveAnnotationToIndex(m_page->page, ann, index);
+}
+
+int Page::annotationIndex(const Annotation *ann) const
+{
+    return AnnotationPrivate::annotationIndex(m_page->page, ann);
+}
+
+int Page::annotationCount() const
+{
+    return AnnotationPrivate::annotationCount(m_page->page);
+}
+
 void Page::removeAnnotation(const Annotation *ann)
 {
     AnnotationPrivate::removeAnnotationFromPage(m_page->page, ann);

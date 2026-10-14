@@ -1,0 +1,4 @@
+POPPLER_163 {
+  global:
+    *;
+};

@@ -1771,6 +1771,7 @@ public:
 
     void appendAnnot(std::shared_ptr<Annot> annot);
     bool removeAnnot(const std::shared_ptr<Annot> &annot);
+    bool moveAnnot(const std::shared_ptr<Annot> &annot, int index);
 
 private:
     std::shared_ptr<Annot> createAnnot(Object &&dictObject, const Object &obj);

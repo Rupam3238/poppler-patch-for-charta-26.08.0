@@ -895,6 +895,22 @@ rather unexpected results.
     */
     void addAnnotation(const Annotation *ann);
 
+   /**
+    * Move an existing annotation to an index in the page's native back-to-front annotation order.
+    * This preserves the existing Poppler annotation object and its PDF dictionary.
+    */
+   bool moveAnnotation(const Annotation *ann, int index);
+
+   /**
+    * Returns the annotation's index in Poppler's native page rendering order, or -1 if it is not on the page.
+    */
+   int annotationIndex(const Annotation *ann) const;
+
+   /**
+    * Returns the number of annotations in Poppler's native page rendering order.
+    */
+   int annotationCount() const;
+
     /**
      Removes an annotation from the page and destroys the annotation object
 

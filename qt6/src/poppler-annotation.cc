@@ -807,9 +807,33 @@ void AnnotationPrivate::removeAnnotationFromPage(::Page *pdfPage, const Annotati
 
     // Remove annotation
     pdfPage->removeAnnot(ann->d_ptr->pdfAnnot);
-
     // Destroy object
     delete ann;
+}
+
+bool AnnotationPrivate::moveAnnotationToIndex(::Page *pdfPage, const Annotation *ann, int index)
+{
+    if (!ann || !ann->d_ptr->pdfAnnot || ann->d_ptr->pdfPage != pdfPage) {
+        return false;
+    }
+
+    return pdfPage->moveAnnot(ann->d_ptr->pdfAnnot, index);
+}
+
+int AnnotationPrivate::annotationIndex(::Page *pdfPage, const Annotation *ann)
+{
+    if (!ann || !ann->d_ptr->pdfAnnot || ann->d_ptr->pdfPage != pdfPage) {
+        return -1;
+    }
+
+    const auto &nativeAnnotations = pdfPage->getAnnots()->getAnnots();
+    const auto it = std::ranges::find(nativeAnnotations, ann->d_ptr->pdfAnnot);
+    return it == nativeAnnotations.end() ? -1 : std::distance(nativeAnnotations.begin(), it);
+}
+
+int AnnotationPrivate::annotationCount(::Page *pdfPage)
+{
+    return pdfPage ? pdfPage->getAnnots()->getAnnots().size() : 0;
 }
 
 class TextAnnotationPrivate : public AnnotationPrivate

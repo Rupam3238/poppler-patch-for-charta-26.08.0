@@ -1,0 +1,149 @@
+{
+	"BUILD_DIR" : "/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_endoflines_autogen",
+	"CMAKE_BINARY_DIR" : "/home/workstation/tools/deps/poppler-26.08.0/build",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/workstation/tools/deps/poppler-26.08.0/qt6/tests",
+	"CMAKE_EXECUTABLE" : "/usr/bin/cmake",
+	"CMAKE_LIST_FILES" : 
+	[
+		"/home/workstation/tools/deps/poppler-26.08.0/qt6/tests/CMakeLists.txt"
+	],
+	"CMAKE_SOURCE_DIR" : "/home/workstation/tools/deps/poppler-26.08.0",
+	"CROSS_CONFIG" : false,
+	"DEP_FILE" : "/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_endoflines_autogen/deps",
+	"DEP_FILE_RULE_NAME" : "check_qt6_endoflines_autogen/timestamp",
+	"HEADERS" : [],
+	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
+	"INCLUDE_DIR" : "/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_endoflines_autogen/include",
+	"MOC_COMPILATION_FILE" : "/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_endoflines_autogen/mocs_compilation.cpp",
+	"MOC_DEFINITIONS" : 
+	[
+		"QT_CORE_LIB",
+		"QT_GUI_LIB",
+		"QT_NO_CAST_FROM_ASCII",
+		"QT_NO_CAST_FROM_BYTEARRAY",
+		"QT_NO_DEBUG",
+		"QT_NO_KEYWORDS",
+		"QT_STRICT_ITERATORS",
+		"QT_TESTCASE_BUILDDIR=\"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests\"",
+		"QT_TESTCASE_SOURCEDIR=\"/home/workstation/tools/deps/poppler-26.08.0/qt6/tests\"",
+		"QT_TESTLIB_LIB",
+		"QT_WIDGETS_LIB",
+		"TESTDATADIR=\"/home/workstation/tools/deps/poppler-26.08.0/../test\""
+	],
+	"MOC_DEPEND_FILTERS" : 
+	[
+		[
+			"Q_PLUGIN_METADATA",
+			"[\n][ \t]*Q_PLUGIN_METADATA[ \t]*\\([^\\)]*FILE[ \t]*\"([^\"]+)\""
+		]
+	],
+	"MOC_INCLUDES" : 
+	[
+		"/home/workstation/tools/deps/poppler-26.08.0/qt6/tests",
+		"/home/workstation/tools/deps/poppler-26.08.0/qt6/src",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/src",
+		"/home/workstation/tools/deps/poppler-26.08.0/qt6/src",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/src",
+		"/home/workstation/tools/deps/poppler-26.08.0/poppler",
+		"/home/workstation/tools/deps/poppler-26.08.0",
+		"/home/workstation/tools/deps/poppler-26.08.0/build",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/poppler",
+		"/usr/include/x86_64-linux-gnu/qt6/QtCore",
+		"/usr/include/x86_64-linux-gnu/qt6",
+		"/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++",
+		"/usr/include/x86_64-linux-gnu/qt6/QtGui",
+		"/usr/include/freetype2",
+		"/usr/include/x86_64-linux-gnu/qt6/QtWidgets",
+		"/usr/include/x86_64-linux-gnu/qt6/QtTest",
+		"/usr/include",
+		"/usr/include/c++/15",
+		"/usr/include/x86_64-linux-gnu/c++/15",
+		"/usr/include/c++/15/backward",
+		"/usr/lib/gcc/x86_64-linux-gnu/15/include",
+		"/usr/local/include",
+		"/usr/include/x86_64-linux-gnu"
+	],
+	"MOC_MACRO_NAMES" : 
+	[
+		"Q_OBJECT",
+		"Q_GADGET",
+		"Q_NAMESPACE",
+		"Q_NAMESPACE_EXPORT",
+		"Q_GADGET_EXPORT",
+		"Q_ENUM_NS"
+	],
+	"MOC_OPTIONS" : [],
+	"MOC_PATH_PREFIX" : false,
+	"MOC_PREDEFS_CMD" : 
+	[
+		"/usr/bin/c++",
+		"-std=c++23",
+		"-w",
+		"-dM",
+		"-E",
+		"/usr/share/cmake-4.2/Modules/CMakeCXXCompilerABI.cpp"
+	],
+	"MOC_PREDEFS_FILE" : "/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_endoflines_autogen/moc_predefs.h",
+	"MOC_RELAXED_MODE" : false,
+	"MOC_SKIP" : 
+	[
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_actualtext_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_annotations_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_attachments_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_cidfontswidthsbuilder_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_dateConversion_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_distinguished_name_parser_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_fonts_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_forms_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_goostring_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_internal_outline_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_lexer_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_links_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_metadata_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_object_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_optcontent_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_outline_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_overprint_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_pagelayout_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_pagemode_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_password_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_permissions_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_search_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_signature_basics_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_signature_basics_pgp_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_stroke_opacity_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_utf8document_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/check_qt6_utf_conversion_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/poppler-qt6-attachments_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/poppler-qt6-fonts_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/poppler-qt6-forms_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/poppler-qt6-page-labels_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/poppler-qt6-texts_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/stress-poppler-dir-qt6_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/stress-poppler-qt6_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/stress-threads-qt6_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/test-password-qt6_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/test-poppler-qt6_autogen/mocs_compilation.cpp",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/test-render-to-file-qt6_autogen/mocs_compilation.cpp"
+	],
+	"MULTI_CONFIG" : false,
+	"PARALLEL" : 2,
+	"PARSE_CACHE_FILE" : "/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/CMakeFiles/check_qt6_endoflines_autogen.dir/ParseCache.txt",
+	"QT_MOC_EXECUTABLE" : "/usr/lib/qt6/libexec/moc",
+	"QT_UIC_EXECUTABLE" : "",
+	"QT_VERSION_MAJOR" : 6,
+	"QT_VERSION_MINOR" : 10,
+	"SETTINGS_FILE" : "/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/CMakeFiles/check_qt6_endoflines_autogen.dir/AutogenUsed.txt",
+	"SOURCES" : 
+	[
+		[
+			"/home/workstation/tools/deps/poppler-26.08.0/qt6/tests/check_endoflines.cpp",
+			"Mu",
+			null
+		]
+	],
+	"USE_BETTER_GRAPH" : true,
+	"VERBOSITY" : 0
+}

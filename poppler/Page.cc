@@ -549,6 +549,81 @@ void Page::removeAnnot(const std::shared_ptr<Annot> &annot)
     annot->setPage(0, false);
 }
 
+bool Page::moveAnnot(const std::shared_ptr<Annot> &annot, int index)
+{
+    if (!annot) {
+        return false;
+    }
+
+    pageLocker();
+    Annots *annotationList = getAnnots();
+    const auto &currentOrder = annotationList->getAnnots();
+    const auto currentIt = std::ranges::find(currentOrder, annot);
+    if (currentIt == currentOrder.end() || index < 0 || index >= static_cast<int>(currentOrder.size())) {
+        return false;
+    }
+
+    const int currentIndex = std::distance(currentOrder.begin(), currentIt);
+    if (currentIndex == index) {
+        return true;
+    }
+
+    std::vector<std::shared_ptr<Annot>> newOrder(currentOrder);
+    std::shared_ptr<Annot> moved = std::move(newOrder[currentIndex]);
+    newOrder.erase(newOrder.begin() + currentIndex);
+    newOrder.insert(newOrder.begin() + index, std::move(moved));
+
+    Object oldAnnotsObject = getAnnotsObject();
+    if (!oldAnnotsObject.isArray()) {
+        return false;
+    }
+
+    std::vector<Ref> orderedRefs;
+    orderedRefs.reserve(newOrder.size() * 2);
+    for (const std::shared_ptr<Annot> &entry : newOrder) {
+        const Ref entryRef = entry->getRef();
+        if (entryRef == Ref::INVALID()) {
+            return false;
+        }
+        orderedRefs.push_back(entryRef);
+
+        auto *markup = dynamic_cast<AnnotMarkup *>(entry.get());
+        const std::shared_ptr<AnnotPopup> popup = markup ? markup->getPopup() : nullptr;
+        if (popup) {
+            const Ref popupRef = popup->getRef();
+            if (popupRef == Ref::INVALID()) {
+                return false;
+            }
+            orderedRefs.push_back(popupRef);
+        }
+    }
+
+    auto refIsInNewOrder = [&orderedRefs](const Ref &ref) { return std::ranges::find(orderedRefs, ref) != orderedRefs.end(); };
+    auto newArray = std::make_unique<Array>(xref);
+    for (const Ref &ref : orderedRefs) {
+        newArray->add(Object(ref));
+    }
+
+    const Array *oldArray = oldAnnotsObject.getArray();
+    for (int i = 0; i < oldArray->getLength(); ++i) {
+        const Object &entry = oldArray->getNF(i);
+        if (!entry.isRef() || !refIsInNewOrder(entry.getRef())) {
+            newArray->add(entry.copy());
+        }
+    }
+
+    Object updatedAnnots(std::move(newArray));
+    if (annotsObj.isRef()) {
+        xref->setModifiedObject(&updatedAnnots, annotsObj.getRef());
+    } else {
+        pageObj.dictSet("Annots", updatedAnnots.copy());
+        annotsObj = std::move(updatedAnnots);
+        xref->setModifiedObject(&pageObj, pageRef);
+    }
+
+    return annotationList->moveAnnot(annot, index);
+}
+
 std::unique_ptr<Links> Page::getLinks()
 {
     return std::make_unique<Links>(getAnnots());

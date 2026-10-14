@@ -7549,6 +7549,24 @@ bool Annots::removeAnnot(const std::shared_ptr<Annot> &annot)
     return true;
 }
 
+bool Annots::moveAnnot(const std::shared_ptr<Annot> &annot, int index)
+{
+    auto it = std::ranges::find(annots, annot);
+    if (it == annots.end() || index < 0 || index >= static_cast<int>(annots.size())) {
+        return false;
+    }
+
+    const int currentIndex = std::distance(annots.begin(), it);
+    if (currentIndex == index) {
+        return true;
+    }
+
+    std::shared_ptr<Annot> moved = std::move(*it);
+    annots.erase(it);
+    annots.insert(annots.begin() + index, std::move(moved));
+    return true;
+}
+
 std::shared_ptr<Annot> Annots::createAnnot(Object &&dictObject, const Object &obj)
 {
     std::shared_ptr<Annot> annot = nullptr;

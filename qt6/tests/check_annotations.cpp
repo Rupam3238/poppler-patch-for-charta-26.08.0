@@ -1,4 +1,5 @@
 #include <cmath>
+#include <map>
 #include <memory>
 #include <sstream>
 
@@ -8,6 +9,8 @@
 #include <poppler-qt6.h>
 
 #include "poppler/Annot.h"
+#include "poppler/PDFDoc.h"
+#include "poppler/PDFDocFactory.h"
 #include "goo/GooString.h"
 #include "goo/gstrtod.h"
 
@@ -27,6 +30,7 @@ private Q_SLOTS:
     static void checkModificationCreationDate();
     static void checkNonMarkupAnnotations();
     static void checkDefaultAppearance();
+    static void checkAnnotationReorderRenderingAndSave();
 };
 
 /* Is .5f sufficient for 16 bit color channel roundtrip trough save and load on all architectures? */
@@ -256,6 +260,117 @@ void TestAnnotations::checkDefaultAppearance()
         const DefaultAppearance da { daString };
         QVERIFY(da.getFontName().empty());
     }
+}
+
+void TestAnnotations::checkAnnotationReorderRenderingAndSave()
+{
+    std::unique_ptr<Poppler::Document> doc { Poppler::Document::load(QStringLiteral(TESTDATADIR "/simple-multipage.pdf")) };
+    QVERIFY(doc.get());
+
+    std::unique_ptr<Poppler::Page> page { doc->page(0) };
+    QVERIFY(page.get());
+
+    auto red = std::make_unique<Poppler::GeomAnnotation>();
+    red->setUniqueName(QStringLiteral("stack-red"));
+    red->setBoundary(QRectF(0.2, 0.2, 0.6, 0.6));
+    red->setGeomType(Poppler::GeomAnnotation::InscribedSquare);
+    red->setGeomInnerColor(Qt::red);
+
+    auto blue = std::make_unique<Poppler::GeomAnnotation>();
+    blue->setUniqueName(QStringLiteral("stack-blue"));
+    blue->setBoundary(QRectF(0.2, 0.2, 0.6, 0.6));
+    blue->setGeomType(Poppler::GeomAnnotation::InscribedSquare);
+    blue->setGeomInnerColor(Qt::blue);
+
+    auto ink = std::make_unique<Poppler::InkAnnotation>();
+    ink->setUniqueName(QStringLiteral("stack-custom-ink"));
+    ink->setBoundary(QRectF(0.05, 0.05, 0.1, 0.1));
+    ink->setInkPaths({{QPointF(0.05, 0.05), QPointF(0.15, 0.15)}});
+    ink->setAppearanceStream(QByteArray("0 1 0 rg 0 0 100 100 re f"), QRectF(0, 0, 100, 100));
+
+    page->addAnnotation(red.get());
+    page->addAnnotation(blue.get());
+    page->addAnnotation(ink.get());
+    auto annotations = page->annotations();
+    QCOMPARE(annotations.size(), size_t(3));
+    QCOMPARE(annotations.at(1)->uniqueName(), QStringLiteral("stack-blue"));
+
+    QImage image = page->renderToImage();
+    QVERIFY(!image.isNull());
+    const QPoint samplePoint(image.width() / 2, image.height() / 2);
+    QCOMPARE(image.pixelColor(samplePoint), QColor(Qt::blue));
+
+    QTemporaryFile beforeMoveFile;
+    QVERIFY(beforeMoveFile.open());
+    beforeMoveFile.close();
+    std::unique_ptr<Poppler::PDFConverter> beforeMoveConverter(doc->pdfConverter());
+    beforeMoveConverter->setOutputFileName(beforeMoveFile.fileName());
+    beforeMoveConverter->setPDFOptions(beforeMoveConverter->pdfOptions() | Poppler::PDFConverter::WithChanges);
+    QVERIFY(beforeMoveConverter->convert());
+
+    using AnnotationRefs = std::map<std::string, std::pair<int, int>>;
+    const auto annotationRefs = [](const QString &fileName) {
+        const GooString nativeFileName(fileName.toStdString());
+        std::unique_ptr<PDFDoc> nativeDoc = PDFDocFactory().createPDFDoc(nativeFileName);
+        AnnotationRefs refs;
+        if (!nativeDoc) {
+            return refs;
+        }
+        const auto &nativeAnnotations = nativeDoc->getPage(1)->getAnnots()->getAnnots();
+        for (const std::shared_ptr<Annot> &nativeAnnotation : nativeAnnotations) {
+            const GooString *name = nativeAnnotation->getUniqueName();
+            if (name) {
+                const Ref ref = nativeAnnotation->getRef();
+                refs.emplace(name->toStr(), std::pair { ref.num, ref.gen });
+            }
+        }
+        return refs;
+    };
+    const AnnotationRefs refsBeforeMove = annotationRefs(beforeMoveFile.fileName());
+    QCOMPARE(refsBeforeMove.size(), size_t(3));
+
+    QVERIFY(page->moveAnnotation(red.get(), 1));
+    annotations = page->annotations();
+    QCOMPARE(annotations.size(), size_t(3));
+    QCOMPARE(annotations.at(1)->uniqueName(), QStringLiteral("stack-red"));
+
+    image = page->renderToImage();
+    QCOMPARE(image.pixelColor(samplePoint), QColor(Qt::red));
+
+    QTemporaryFile outputFile;
+    QVERIFY(outputFile.open());
+    outputFile.close();
+    std::unique_ptr<Poppler::PDFConverter> converter(doc->pdfConverter());
+    QVERIFY(converter.get());
+    converter->setOutputFileName(outputFile.fileName());
+    converter->setPDFOptions(converter->pdfOptions() | Poppler::PDFConverter::WithChanges);
+    QVERIFY(converter->convert());
+
+    const AnnotationRefs refsAfterMove = annotationRefs(outputFile.fileName());
+    QCOMPARE(refsAfterMove, refsBeforeMove);
+
+    std::unique_ptr<Poppler::Document> reopened { Poppler::Document::load(outputFile.fileName()) };
+    QVERIFY(reopened.get());
+    std::unique_ptr<Poppler::Page> reopenedPage { reopened->page(0) };
+    QVERIFY(reopenedPage.get());
+    const auto reopenedAnnotations = reopenedPage->annotations();
+    QCOMPARE(reopenedAnnotations.size(), size_t(3));
+    QCOMPARE(reopenedAnnotations.at(1)->uniqueName(), QStringLiteral("stack-red"));
+    QCOMPARE(reopenedAnnotations.back()->uniqueName(), QStringLiteral("stack-custom-ink"));
+    const QImage reopenedImage = reopenedPage->renderToImage();
+    QCOMPARE(reopenedImage.pixelColor(samplePoint), QColor(Qt::red));
+    const QRect customInkRegion(qRound(reopenedImage.width() * 0.04), qRound(reopenedImage.height() * 0.04), qRound(reopenedImage.width() * 0.12), qRound(reopenedImage.height() * 0.12));
+    bool foundCustomInkGreen = false;
+    for (int y = customInkRegion.top(); y <= customInkRegion.bottom() && !foundCustomInkGreen; ++y) {
+        for (int x = customInkRegion.left(); x <= customInkRegion.right(); ++x) {
+            const QColor color = reopenedImage.pixelColor(x, y);
+            if (color.green() > 200 && color.red() < 40 && color.blue() < 40) {
+                foundCustomInkGreen = true;
+                break;
+            }
+        }
+    }
+    QVERIFY(foundCustomInkGreen);
 }
 
 QTEST_GUILESS_MAIN(TestAnnotations)

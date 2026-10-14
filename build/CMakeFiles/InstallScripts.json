@@ -1,0 +1,12 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/workstation/tools/deps/poppler-26.08.0/build/cmake_install.cmake",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/test/cmake_install.cmake",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/cmake_install.cmake",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/src/cmake_install.cmake",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/tests/cmake_install.cmake",
+		"/home/workstation/tools/deps/poppler-26.08.0/build/qt6/demos/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

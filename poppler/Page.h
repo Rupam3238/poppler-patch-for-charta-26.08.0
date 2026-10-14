@@ -168,6 +168,8 @@ public:
     bool addAnnot(const std::shared_ptr<Annot> &annot);
     // Remove an existing annotation from the page
     void removeAnnot(const std::shared_ptr<Annot> &annot);
+    // Move an existing annotation in the back-to-front page order.
+    bool moveAnnot(const std::shared_ptr<Annot> &annot, int index);
 
     // Return a list of links.
     std::unique_ptr<Links> getLinks();
