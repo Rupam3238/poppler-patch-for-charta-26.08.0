@@ -1,2 +1,0 @@
-# Empty custom commands generated dependencies file for check_qt6_signature_basics_pgp_autogen_timestamp_deps.
-# This may be replaced when dependencies are built.
