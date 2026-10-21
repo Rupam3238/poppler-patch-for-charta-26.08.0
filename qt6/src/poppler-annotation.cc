@@ -162,6 +162,11 @@ void AnnotationPrivate::tieToNativeAnnot(std::shared_ptr<Annot> ann, ::Page *pag
     pdfAnnot = std::move(ann);
     pdfPage = page;
     parentDoc = doc;
+
+#ifdef POPPLER_QT6_HAS_ANNOTATION_ROTATION
+    userRotation = pdfAnnot->getUserRotation();
+    userLocalSize = QSizeF(pdfAnnot->getUserLocalWidth(), pdfAnnot->getUserLocalHeight());
+#endif
 }
 
 /* This method is called when a new annotation is created, after pdfAnnot and
@@ -791,6 +796,15 @@ void AnnotationPrivate::addAnnotationToPage(::Page *pdfPage, DocumentData *doc, 
     }
 
     pdfPage->addAnnot(nativeAnnot);
+
+#ifdef POPPLER_QT6_HAS_ANNOTATION_ROTATION
+    // Zero is a valid stored rotation when the frame angle equals the page
+    // orientation; the local size is what tells the importer that the
+    // Charta metadata is present.
+    if (!ann->d_ptr->userLocalSize.isEmpty()) {
+        nativeAnnot->setUserRotation(ann->d_ptr->userRotation, ann->d_ptr->userLocalSize.width(), ann->d_ptr->userLocalSize.height());
+    }
+#endif
 }
 
 void AnnotationPrivate::removeAnnotationFromPage(::Page *pdfPage, const Annotation *ann)
@@ -1321,6 +1335,34 @@ void Annotation::setBoundary(const QRectF &boundary)
     }
     d->pdfAnnot->setRect(rect);
 }
+
+#ifdef POPPLER_QT6_HAS_ANNOTATION_ROTATION
+void Annotation::setUserRotation(double degreesCounterClockwise, double localWidth, double localHeight)
+{
+    Q_D(Annotation);
+    d->userRotation = degreesCounterClockwise;
+    d->userLocalSize = QSizeF(localWidth, localHeight);
+
+    if (d->pdfAnnot) {
+        d->pdfAnnot->setUserRotation(degreesCounterClockwise, localWidth, localHeight);
+    }
+}
+
+double Annotation::userRotation() const
+{
+    Q_D(const Annotation);
+    return d->pdfAnnot ? d->pdfAnnot->getUserRotation() : d->userRotation;
+}
+
+QSizeF Annotation::userLocalSize() const
+{
+    Q_D(const Annotation);
+    if (d->pdfAnnot) {
+        return QSizeF(d->pdfAnnot->getUserLocalWidth(), d->pdfAnnot->getUserLocalHeight());
+    }
+    return d->userLocalSize;
+}
+#endif
 
 Annotation::Style Annotation::style() const
 {

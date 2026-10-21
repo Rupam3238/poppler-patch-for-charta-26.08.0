@@ -36,12 +36,15 @@
 #define _POPPLER_ANNOTATION_H_
 #define POPPLER_QT6_HAS_CUSTOM_INK_APPEARANCE 1
 
+#define POPPLER_QT6_HAS_ANNOTATION_ROTATION 1
+
 #include <QtCore/QDateTime>
 #include <QtCore/QByteArray>
 #include <QtCore/QSharedDataPointer>
 #include <QtCore/QList>
 #include <QtCore/QPointF>
 #include <QtCore/QRectF>
+#include <QtCore/QSizeF>
 #include <QtCore/QScopedPointer>
 #include <QtCore/QVector>
 #include <QtGui/QColor>
@@ -318,6 +321,32 @@ public:
      * \sa boundary(), \ref annotFixedRotation
      */
     void setBoundary(const QRectF &boundary);
+
+#ifdef POPPLER_QT6_HAS_ANNOTATION_ROTATION
+    /**
+     * Rotates the annotation appearance around its centre.
+     *
+     * \param degreesCounterClockwise rotation in PDF user-space direction
+     * \param localWidth unrotated annotation width in PDF points
+     * \param localHeight unrotated annotation height in PDF points
+     *
+     * Line, polyline, polygon and ink annotations carry their rotation in
+     * their native geometry and only store these values as metadata.
+     *
+     * \since 26.08
+     */
+    void setUserRotation(double degreesCounterClockwise, double localWidth, double localHeight);
+
+    /**
+     * Returns the stored PDF user-space rotation in degrees counter-clockwise.
+     */
+    double userRotation() const;
+
+    /**
+     * Returns the stored unrotated annotation size in PDF points.
+     */
+    QSizeF userLocalSize() const;
+#endif
 
     /**
      * \short Container class for Annotation style information

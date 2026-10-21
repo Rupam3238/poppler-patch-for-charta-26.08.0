@@ -736,6 +736,20 @@ public:
 
     void setRect(const PDFRectangle &rect);
     void setRect(double x1, double y1, double x2, double y2);
+    // Updates /Rect without invalidating a custom appearance stream.
+    void setRectKeepAppearance(double x1, double y1, double x2, double y2);
+
+    // Rotates the annotation around its centre by degreesCounterClockwise
+    // (PDF user-space direction). localWidth/localHeight are the unrotated
+    // annotation dimensions in PDF points. The /Rect entry is updated to the
+    // axis-aligned bounds of the rotated local rectangle and the appearance
+    // stream is wrapped so that the visual content rotates with it.
+    // Line, polyline, polygon and ink annotations carry their rotation in
+    // their native geometry; for those only the metadata keys are written.
+    void setUserRotation(double degreesCounterClockwise, double localWidth, double localHeight);
+    double getUserRotation() const { return userRotation; }
+    double getUserLocalWidth() const { return userLocalWidth; }
+    double getUserLocalHeight() const { return userLocalHeight; }
 
     // Sets the annot contents to new_content
     // new_content should never be NULL
@@ -802,6 +816,12 @@ protected:
     // Delete appearance streams and reset appearance state
     virtual void invalidateAppearance();
 
+    // Creates the normal appearance for subtypes which generate it lazily.
+    // Subclasses override this so setUserRotation() can wrap the unrotated
+    // appearance even before the page has ever been rendered.
+    virtual void generateAppearance() { }
+    void rotateAppearance(double degreesCounterClockwise);
+
     Object annotObj;
 
     // required data
@@ -832,6 +852,13 @@ protected:
 
     bool hasBeenUpdated = false;
     Ref updatedAppearanceStream = Ref::INVALID(); // {-1,-1} if updateAppearanceStream has never been called
+
+    // Charta rotation metadata (PDF user space, degrees counter-clockwise).
+    double userRotation = 0;
+    double userLocalWidth = 0;
+    double userLocalHeight = 0;
+    bool appearanceHasUserRotation = false;
+
 private:
     std::unique_ptr<GooString> name; // NM
 };
@@ -1090,6 +1117,7 @@ public:
 protected:
     void initialize(Dict *dict);
     void generateFreeTextAppearance();
+    void generateAppearance() override { generateFreeTextAppearance(); }
 
     // required
     std::string appearanceString; // DA
@@ -1241,6 +1269,7 @@ private:
     void generateStampDefaultAppearance();
     void generateStampCustomAppearance();
     void updateAppearanceResDict();
+    void generateAppearance() override { updateAppearanceResDict(); }
 
     std::string icon; // Name       (Default Draft)
     std::unique_ptr<AnnotStampImageHelper> stampImageHelper;
@@ -1269,6 +1298,7 @@ public:
 
 private:
     void initialize(Dict *dict);
+    void generateAppearance() override;
 
     std::unique_ptr<AnnotColor> interiorColor; // IC
     std::unique_ptr<AnnotBorderEffect> borderEffect; // BE

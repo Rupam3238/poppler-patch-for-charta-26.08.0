@@ -72,6 +72,10 @@ public:
     Annotation::Flags flags;
     QRectF boundary;
 
+    /* oriented annotation frame, in PDF user-space units */
+    double userRotation = 0;
+    QSizeF userLocalSize;
+
     /* style and popup */
     Annotation::Style style;
     Annotation::Popup popup;
